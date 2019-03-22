@@ -63,7 +63,11 @@ class AnchorTargetCreator(object):
             inds_box[indsP2] = inds_gt_box[indsP2]
             # print('***************  ATC true')
         indsP = indsP1 | indsP2
-        indsN = indsN & (~indsP2)
+        
+        if False:
+            indsN = indsN & (~indsP2) #小于neg_iou_thresh,但有最大匹配，为正样本
+        else:
+            indsP=indsP&(~indsN)   #注意，这里是个参数，小于neg_iou_thresh,为负样本
 
         t = torch.arange(indsP.shape[0])
         indsP = t[indsP]
