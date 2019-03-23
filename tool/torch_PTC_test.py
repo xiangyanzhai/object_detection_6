@@ -53,6 +53,13 @@ class ProposalTargetCreator(object):
     def __call__(self, roi, bbox, label,
                  loc_normalize_mean=(0., 0., 0., 0.),
                  loc_normalize_std=(0.1, 0.1, 0.2, 0.2)):
+        if bbox.shape[0] == 0:
+            inds = np.random.choice(roi.shape[0], self.n_sample)
+            roi = roi[inds]
+            loc = cuda(torch.zeros((0, 4), dtype=torch.float32))
+            label = cuda(torch.zeros(roi.shape[0], dtype=torch.int64))
+            return roi, loc, label
+        
         roi = torch.cat([roi, bbox], dim=0)
         IOU = cal_IOU(roi, bbox)
         iou, inds_box = IOU.max(dim=1)
