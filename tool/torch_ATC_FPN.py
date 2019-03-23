@@ -48,6 +48,15 @@ class AnchorTargetCreator(object):
         self.pos_ratio = pos_ratio
 
     def __call__(self, bbox, anchor, img_size):
+        if bbox.shape[0] == 0:
+            inds = np.random.choice(anchor.shape[0], size=self.n_sample, replace=False)
+            label = torch.zeros(self.n_sample, dtype=torch.int64).cuda()
+            inds = torch.tensor(inds, dtype=torch.int64).cuda()
+            indsP = torch.tensor([], dtype=torch.int64).cuda()
+            loc = torch.zeros((0, 4), dtype=torch.float32).cuda()
+            return inds, label, indsP, loc
+        
+        
         IOU = cal_IOU(anchor, bbox)
 
         iou, inds_box = IOU.max(dim=1)
