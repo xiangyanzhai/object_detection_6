@@ -54,7 +54,7 @@ class ProposalTargetCreator(object):
                  loc_normalize_mean=(0., 0., 0., 0.),
                  loc_normalize_std=(0.1, 0.1, 0.2, 0.2)):
         if bbox.shape[0] == 0:
-            inds = np.random.choice(roi.shape[0], self.n_sample)
+            inds = np.random.choice(roi.shape[0], size=min(roi.shape[0], self.n_sample), replace=False)
             roi = roi[inds]
             loc = cuda(torch.zeros((0, 4), dtype=torch.float32))
             label = cuda(torch.zeros(roi.shape[0], dtype=torch.int64))
