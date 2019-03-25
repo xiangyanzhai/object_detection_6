@@ -1,7 +1,7 @@
 # !/usr/bin/python
 # -*- coding:utf-8 -*-
 import torch
-
+import numpy as np
 is_gpu = torch.cuda.is_available()
 def cuda(x):
     if is_gpu:
